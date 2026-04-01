@@ -1,13 +1,33 @@
 const apiURL = '/products';
 
+// Elementos del DOM
 const form = document.getElementById('productForm');
 const nameInput = document.getElementById('prodName');
 const priceInput = document.getElementById('prodPrice');
 const quantityInput = document.getElementById('prodQuantity');
 const productsBody = document.getElementById('productsBody');
+const productCount = document.getElementById('productCount');
+const btnSortPrice = document.getElementById('btnSortPrice');
+
+// Variables globales para el manejo del inventario
+let currentProducts = [];
+let sortAscending = true;
 
 // Cargar productos al inicio
 document.addEventListener('DOMContentLoaded', fetchProducts);
+
+// Botón para ordenar por precio
+btnSortPrice.addEventListener('click', () => {
+    // Cambiar la dirección del orden
+    sortAscending = !sortAscending;
+    
+    // Flecha de interfaz (estético)
+    btnSortPrice.textContent = sortAscending ? 'Ordenar por Precio ⬆️' : 'Ordenar por Precio ⬇️';
+    
+    // Ordenar el arreglo y volver a renderizar (sin volver a descargar)
+    currentProducts.sort((a, b) => sortAscending ? a.price - b.price : b.price - a.price);
+    renderTable(currentProducts);
+});
 
 // Crear un nuevo producto
 form.addEventListener('submit', async (e) => {
@@ -38,49 +58,57 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// Obtener todos los productos
+// Descargar todos los productos de la API
 async function fetchProducts() {
     try {
         const response = await fetch(apiURL);
-        const products = await response.json();
+        currentProducts = await response.json();
         
-        productsBody.innerHTML = '';
-
-        if (products.length === 0) {
-            productsBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">El inventario está vacío</td></tr>`;
-            return;
-        }
-
-        // Crear una fila (tr) por cada producto
-        products.forEach(prod => {
-            const tr = document.createElement('tr');
-
-            tr.innerHTML = `
-                <td class="td-name"></td>
-                <td class="td-price"></td>
-                <td class="td-quantity"></td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
-                </td>
-            `;
-
-            // Asignar los valores del DOM de forma segura
-            tr.querySelector('.td-name').textContent = prod.name;
-            tr.querySelector('.td-price').textContent = `$${parseFloat(prod.price).toFixed(2)}`;
-            tr.querySelector('.td-quantity').textContent = prod.quantity;
-
-            // Manejadores de eventos
-            tr.querySelector('.btn-edit').addEventListener('click', () => editProduct(prod));
-            tr.querySelector('.btn-delete').addEventListener('click', () => deleteProduct(prod.id));
-
-            productsBody.appendChild(tr);
-        });
-
+        // Renderizar si fue exitoso
+        renderTable(currentProducts);
     } catch (err) {
         console.error('Error al cargar productos:', err);
         productsBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:red;">Error de conexión con el colmado</td></tr>`;
     }
+}
+
+// Pintar la lista de productos en el HTML (DOM)
+function renderTable(products) {
+    productsBody.innerHTML = '';
+    
+    // ACTUALIZAR CONTADOR
+    productCount.textContent = products.length;
+
+    if (products.length === 0) {
+        productsBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">El inventario está vacío</td></tr>`;
+        return;
+    }
+
+    // Crear una fila (tr) por cada producto
+    products.forEach(prod => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+            <td class="td-name"></td>
+            <td class="td-price"></td>
+            <td class="td-quantity"></td>
+            <td>
+                <button class="btn-edit">Editar</button>
+                <button class="btn-delete">Eliminar</button>
+            </td>
+        `;
+
+        // Asignar los valores del DOM de forma segura
+        tr.querySelector('.td-name').textContent = prod.name;
+        tr.querySelector('.td-price').textContent = `$${parseFloat(prod.price).toFixed(2)}`;
+        tr.querySelector('.td-quantity').textContent = prod.quantity;
+
+        // Manejadores de eventos
+        tr.querySelector('.btn-edit').addEventListener('click', () => editProduct(prod));
+        tr.querySelector('.btn-delete').addEventListener('click', () => deleteProduct(prod.id));
+
+        productsBody.appendChild(tr);
+    });
 }
 
 // Editar la informacion de un producto
@@ -111,7 +139,7 @@ async function editProduct(product) {
         });
         
         if (response.ok) {
-            fetchProducts();
+            fetchProducts(); // vuelve a descargar los datos correctos
         } else {
             alert('Error al actualizar el producto en inventario');
         }
