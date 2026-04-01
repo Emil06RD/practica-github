@@ -139,7 +139,8 @@ async function editProduct(product) {
         });
         
         if (response.ok) {
-            fetchProducts(); // vuelve a descargar los datos correctos
+            alert('Producto actualizado correctamente');
+            fetchProducts(); // recargar la lista de productos
         } else {
             alert('Error al actualizar el producto en inventario');
         }
