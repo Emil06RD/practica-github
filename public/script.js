@@ -80,7 +80,7 @@ function renderTable(products) {
     productCount.textContent = products.length;
 
     if (products.length === 0) {
-        productsBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">El inventario está vacío</td></tr>`;
+        productsBody.innerHTML = `<tr><td colspan="4"><div class="empty-message">No hay productos registrados</div></td></tr>`;
         return;
     }
 
