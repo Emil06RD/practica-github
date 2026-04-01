@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colmado App</title>
+    <!-- Vincula el CSS en la misma carpeta public -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="wrapper">
+        <header>
+            <h1>Colmado App</h1>
+            <p>Sistema de Inventario</p>
+        </header>
+
+        <section id="form-section">
+            <h2>Gestión de Productos</h2>
+            <form id="productForm">
+                <div class="input-group">
+                    <label for="prodName">Nombre del Producto:</label>
+                    <input type="text" id="prodName" placeholder="Ej: Arroz" required />
+                </div>
+                
+                <div class="input-group">
+                    <label for="prodPrice">Precio ($):</label>
+                    <input type="number" id="prodPrice" step="0.01" min="0" placeholder="Ej: 35.00" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="prodQuantity">Cantidad en stock:</label>
+                    <input type="number" id="prodQuantity" min="0" placeholder="Ej: 50" required />
+                </div>
+                
+                <button type="submit" class="btn-primary">Registrar Producto</button>
+            </form>
+        </section>
+
+        <section id="list-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h2 style="margin: 0;">Lista de Productos</h2>
+                <div>
+                    <span style="font-weight: bold; margin-right: 15px;">Total: <span id="productCount">0</span></span>
+                    <button id="btnSortPrice" style="padding: 6px 12px; cursor: pointer; border-radius: 4px; border: 1px solid #ccc;">Ordenar por Precio ↕️</button>
+                </div>
+            </div>
+            
+            <table id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productsBody">
+                    <!-- Los productos se inyectarán mediante JavaScript aquí -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Vincula el script en la misma carpeta public -->
+    <script src="script.js"></script>
+</body>
+</html>
