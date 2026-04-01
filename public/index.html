@@ -37,7 +37,13 @@
         </section>
 
         <section id="list-section">
-            <h2>Lista de Productos</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h2 style="margin: 0;">Lista de Productos</h2>
+                <div>
+                    <span style="font-weight: bold; margin-right: 15px;">Total: <span id="productCount">0</span></span>
+                    <button id="btnSortPrice" style="padding: 6px 12px; cursor: pointer; border-radius: 4px; border: 1px solid #ccc;">Ordenar por Precio ↕️</button>
+                </div>
+            </div>
             
             <table id="productsTable">
                 <thead>
