@@ -151,7 +151,7 @@ async function editProduct(product) {
 
 // Borrar el producto
 async function deleteProduct(id) {
-    if (!confirm('¿Seguro quieres eliminar este producto del inventario?')) return;
+    if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
 
     try {
         const response = await fetch(`${apiURL}/${id}`, { method: 'DELETE' });
